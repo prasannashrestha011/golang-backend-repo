@@ -4,6 +4,8 @@ import (
 	"database/sql"
 	"fmt"
 	"log"
+	"net/http"
+	"projec/filemanagement"
 	"projec/method"
 	"projec/middleware"
 
@@ -17,10 +19,12 @@ func main() {
 
 	r := gin.Default()
 
+	r.StaticFS("/public", http.Dir("./public"))
+
 	r.POST("/register", method.Insert_key)
 	r.GET("/get-all-key", middleware.RequireAuth, method.Get_All_Key)
 	r.POST("/login", method.Authenticate_handler)
-
+	r.POST("/upload-file", filemanagement.UploadFile)
 	defer db.Close()
 	if err != nil {
 		panic(err.Error())
