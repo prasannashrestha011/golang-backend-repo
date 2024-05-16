@@ -20,6 +20,18 @@ func CreateToken(username string) (string, error) {
 	}
 	return tokenString, nil
 }
-func VerifyToken() {
-
+func VerifyToken(tokenString string) error {
+	privateKeyStr := os.Getenv("SECRET")
+	privateKey := []byte(privateKeyStr)
+	token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
+		return privateKey, nil
+	})
+	if err != nil {
+		fmt.Println(err)
+		return err
+	}
+	if !token.Valid {
+		return fmt.Errorf("invalid token")
+	}
+	return nil
 }

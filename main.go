@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"log"
 	"projec/method"
+	"projec/middleware"
 
 	"github.com/gin-gonic/gin"
 	_ "github.com/go-sql-driver/mysql"
@@ -17,7 +18,7 @@ func main() {
 	r := gin.Default()
 
 	r.POST("/register", method.Insert_key)
-	r.GET("/get-all-key", method.Get_All_Key)
+	r.GET("/get-all-key", middleware.RequireAuth, method.Get_All_Key)
 	r.POST("/login", method.Authenticate_handler)
 
 	defer db.Close()
